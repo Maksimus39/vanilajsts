@@ -1,12 +1,12 @@
 import {
-    addNewBooksToUser,
+    addNewBooksToUser, companiesTitle,
     makeHairStyle,
     moveUser,
-    moveUserToOtherHouse, removeBook, updateBook, updateSkill, UpdateSkillType,
+    moveUserToOtherHouse, removeBook, updateBook, updateCompanyTitle, updateSkill, UpdateSkillType,
     upgradeUserLaptop,
     UserType,
     UserWithBooksType,
-    UserWithLaptopType
+    UserWithLaptopType, WithCompaniesType
 } from "./10_01";
 
 test('reference type test', () => {
@@ -184,4 +184,64 @@ test('remove  js book', () => {
     expect(user.books).not.toBe(userCopy.books)
     expect(userCopy.books[2]).toBe('React')
 
+})
+
+test('work to', () => {
+
+    let user: UserWithLaptopType & WithCompaniesType = {
+        name: 'Max',
+        hair: 40,
+        address: {
+            city: 'Dirt',
+            house: 12,
+        },
+        laptop: {
+            title: 'ZenBook'
+        },
+        companies: [
+            {
+                id: 1,
+                title: 'LPak',
+            },
+            {
+                id: 2,
+                title: 'NLMK'
+            }
+        ]
+    }
+    const UserCopy = updateCompanyTitle(user, 1, 'LPac')
+
+    expect(user).not.toBe(UserCopy)
+    expect(user.address).toBe(UserCopy.address)
+    expect(user.companies).not.toBe(UserCopy.companies)
+    expect(UserCopy.companies[0].title).toBe('LPac')
+
+})
+
+test('update company', () => {
+
+    let companies = {
+        'Max': [
+            {
+                id: 1,
+                title: 'LPak',
+            },
+            {
+                id: 2,
+                title: 'NLMK'
+            }
+        ],
+        'Larisa': [
+            {
+                id: 1,
+                title: 'Liniy',
+            }
+        ]
+    }
+
+    const copy = companiesTitle(companies, 'Max', 1, 'LPac')
+    expect(copy['Max']).not.toBe(companies['Max'])
+    expect(copy['Larisa']).toBe(companies['Larisa'])
+    expect(copy['Max'][0].title).toBe('LPac')
+    expect(copy['Max'][0].title).not.toBe('LPak')
 })

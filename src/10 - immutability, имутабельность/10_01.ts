@@ -9,13 +9,15 @@ export type LaptopType = {
 export type UserWithLaptopType = UserType & {
     laptop: LaptopType
 }
-
 export type UserWithBooksType = UserType & {
     books: string[]
 }
-
 export type UpdateSkillType = UserType & {
     updateSkill: number[]
+}
+type CompanyType = { id: number, title: string }
+export type WithCompaniesType = {
+    companies: Array<CompanyType>
 }
 
 
@@ -73,6 +75,23 @@ export function updateSkill(u: UserWithLaptopType & UserWithBooksType & UpdateSk
 
 export function removeBook(u: UserWithLaptopType & UserWithBooksType & UpdateSkillType, bookForDelete: string) {
     return {
-        ...u, books: u.books.filter(b => b !== bookForDelete )
+        ...u, books: u.books.filter(b => b !== bookForDelete)
     }
+}
+
+export function updateCompanyTitle(u: UserWithLaptopType & WithCompaniesType, ID: number, Title: string) {
+    return {
+        ...u, companies: u.companies.map(co => co.id === ID ? {...u, title: Title} : co)
+
+    }
+}
+
+
+export const companiesTitle = (companies: {
+    [key: string]: Array<CompanyType>
+}, userName: string, companyID: number, newTitle: string) => {
+    let companyCopy = {...companies}
+
+    companyCopy[userName] = companyCopy[userName].map(c => c.id === companyID ? {...c, title: newTitle} : c)
+    return companyCopy
 }
